@@ -81,7 +81,12 @@ python manage.py runserver
 
 ## 🌐 Live Demo
 
-Coming soon! Want to contribute to hosting or deployment? Open an issue or start a discussion.
+EcoTrack Local is now live! 🚀  
+Explore the platform and start tracking your impact at:  
+🔗 [ecotracklocal.pythonanywhere.com](https://ecotracklocal.pythonanywhere.com/)
+
+Join the movement—log in, take action, and see your progress come to life.  
+Every eco-step counts, and your journey starts here. 🌱
 
 ---
 
