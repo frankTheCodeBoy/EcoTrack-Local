@@ -1,0 +1,143 @@
+{% extends 'tracker/base.html' %}
+{% load static %}
+{% block title %}Your Profile{% endblock %}
+
+{% block content %}
+  <h2 class="mb-4">👤 Profile Overview</h2>  
+
+  {% if not editable %}
+    <div class="alert alert-warning">
+      👀 You’re viewing <strong>{{ user.username }}</strong>’s profile. 
+      Editing is disabled.
+    </div>
+  {% endif %}
+
+  <!-- 🖼️ Avatar Display -->
+  <div class="text-center mb-4">
+    {% if profile.avatar %}
+      <img src="{{ profile.avatar.url }}" alt="Avatar" 
+      class="rounded-circle border shadow" width="120" height="120">
+    {% else %}
+      <img src="{% static 'images/default-avatar.png' %}" alt="Default Avatar" 
+      class="rounded-circle border shadow" width="120" height="120">
+    {% endif %}
+
+    {% if editable %}
+      <div class="mt-2">
+        <a href="{% url 'edit_profile' %}" 
+        class="btn btn-sm btn-outline-secondary">✏️ Change Avatar</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- User Info Card -->
+  <div class="card p-3 shadow-sm mb-4">
+    <h5 class="mb-2">Username:</h5>
+    <p class="fs-5">{{ user.username }}</p>
+
+    <h5 class="mb-2">Email:</h5>
+    <p class="fs-6 text-muted">{{ user.email }}</p>
+
+    <h5 class="mb-2 mt-3">📝 Status / Bio:</h5>
+    {% if profile.bio %}
+      <div class="border rounded p-3 bg-light text-muted fst-italic position-relative">
+        <span class="position-absolute top-0 end-0 px-2 py-1 text-success small">💬</span>
+        {{ profile.bio|linebreaksbr }}
+      </div>
+    {% else %}
+      <p class="text-muted fst-italic">No bio yet — share something that inspires you. ✨</p>
+    {% endif %}
+  </div>
+
+  <!-- Total Actions Card -->
+  <div class="card p-3 shadow-sm mb-4">
+    <h5 class="mb-2">Total Eco Actions:</h5>
+    <p class="fs-4 text-success">{{ total_actions }}</p>
+  </div>
+
+  <!-- Badge Level -->
+  {% if badge_level %}
+    <div class="card p-3 shadow-sm mb-4 border-info text-center">
+      <h5 class="mb-2">🏅 Badge Level</h5>
+      <div class="badge bg-info text-white fs-5 py-2 px-3 d-inline-block mb-2">
+        {{ badge_level }}
+      </div>
+
+      {% if editable %}
+        <!-- Share Badge Button -->
+        <button class="btn btn-outline-info mt-2" 
+          onclick="copyBadgeMessage()">📢 Share Badge</button>
+        <span id="copy-confirm" class="text-success ms-2" 
+          style="display:none;">Copied!</span>
+
+        <!-- Download Certificate -->
+        <a href="{% url 'download_certificate' %}" class="btn btn-success mt-2">
+        Download My Certificate
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if editable %}
+    <!-- Embed Badge Snippet -->
+    <div class="card p-3 shadow-sm mb-4 border-secondary">
+      <h5 class="mb-2">🔗 Embed Your Badge</h5>
+      <textarea id="embed-snippet" class="form-control" rows="3" readonly>
+<a href="https://yourdomain.com/profile/{{ user.username }}">
+  <span style="display:inline-block; background:#17a2b8; color:white; padding:6px 12px; border-radius:4px;">
+    {{ badge_level }} Badge
+  </span>
+</a>
+      </textarea>
+      <button class="btn btn-outline-secondary mt-2" 
+        onclick="copyEmbed()">📋 Copy Embed Code</button>
+      <span id="embed-confirm" class="text-success ms-2" 
+        style="display:none;">Copied!</span>
+    </div>
+  {% endif %}
+
+  <!-- Streak Tracker -->
+  {% if streak_count and streak_count > 1 %}
+    <div class="alert alert-success">
+      🔥 Streak: <strong>{{ streak_count }}</strong> 
+      consecutive weeks of action!
+    </div>
+  {% endif %}
+
+  <!-- Navigation -->
+  <div class="mt-4">
+    <a href="{% url 'dashboard' %}" class="btn btn-outline-primary">
+    ← Back to Dashboard</a>
+    <a href="{% url 'leaderboard' %}" class="btn btn-outline-info me-2">
+    🏆 View Leaderboard</a>
+    <a href="{% url 'region_summary' %}" class="btn btn-outline-dark me-2">
+    📍 View Regional Summary</a>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    function copyBadgeMessage() {
+      const username = "{{ user.username }}";
+      const badge = "{{ badge_level }}";
+      const points = "{{ total_points }}";
+      const message = `🌍 I just earned the ${badge} badge on EcoTrack Local with ${points} eco points! Join the movement and track your impact. #EcoTrackLocal`;
+
+      navigator.clipboard.writeText(message).then(() => {
+        document.getElementById('copy-confirm').style.display = 'inline';
+        setTimeout(() => {
+          document.getElementById('copy-confirm').style.display = 'none';
+        }, 3000);
+      });
+    }
+
+    function copyEmbed() {
+      const embed = document.getElementById('embed-snippet');
+      navigator.clipboard.writeText(embed.value).then(() => {
+        document.getElementById('embed-confirm').style.display = 'inline';
+        setTimeout(() => {
+          document.getElementById('embed-confirm').style.display = 'none';
+        }, 3000);
+      });
+    }
+  </script>
+{% endblock %}

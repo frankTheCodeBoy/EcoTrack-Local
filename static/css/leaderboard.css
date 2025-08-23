@@ -1,0 +1,26 @@
+/* leaderboard.css */
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  color: #28a745;
+}
+
+tbody tr {
+  animation: fadeInUp 0.4s ease-in;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal-specific styles are scoped in leaderboard.html to avoid duplication */

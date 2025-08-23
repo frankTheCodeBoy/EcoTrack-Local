@@ -1,0 +1,68 @@
+{% extends 'accounts/base.html' %}
+{% load formtags %}
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">📝 Create an Account</h2>
+
+<form method="post" class="p-3 border rounded shadow-sm" style="max-width: 500px;">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label for="id_username" class="form-label">👤 Username</label>
+    {{ form.username|add_class:"form-control" }}
+    <div id="username-feedback" class="small mt-1"></div>
+    {% if form.username.errors %}
+      <div class="text-danger small">{{ form.username.errors.0 }}</div>
+    {% endif %}
+  </div>
+
+  <div class="mb-3">
+    <label for="id_email" class="form-label">📧 Email</label>
+    {{ form.email|add_class:"form-control" }}
+    {% if form.email.errors %}
+      <div class="text-danger small">{{ form.email.errors.0 }}</div>
+    {% endif %}
+  </div>
+
+  <div class="mb-3">
+    <label for="id_password1" class="form-label">🔑 Password</label>
+    {{ form.password1|add_class:"form-control" }}
+    {% if form.password1.errors %}
+      <div class="text-danger small">{{ form.password1.errors.0 }}</div>
+    {% endif %}
+  </div>
+
+  <div class="mb-3">
+    <label for="id_password2" class="form-label">🔒 Confirm Password</label>
+    {{ form.password2|add_class:"form-control" }}
+    {% if form.password2.errors %}
+      <div class="text-danger small">{{ form.password2.errors.0 }}</div>
+    {% endif %}
+  </div>
+
+  <button type="submit" class="btn btn-success mt-3 w-100">Register</button>
+</form>
+
+<p class="mt-3">Already have an account? <a href="{% url 'login' %}">Log in here</a>.</p>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const usernameInput = document.getElementById('id_username');
+  const feedback = document.getElementById('username-feedback');
+
+  usernameInput.addEventListener('blur', function () {
+    fetch(`/check-username/?username=${usernameInput.value}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.exists) {
+          feedback.textContent = "❌ Username already taken.";
+          feedback.className = "text-danger";
+        } else {
+          feedback.textContent = "✅ Username is available.";
+          feedback.className = "text-success";
+        }
+      });
+  });
+});
+</script>
+{% endblock %}

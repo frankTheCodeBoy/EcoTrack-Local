@@ -1,0 +1,12 @@
+.no-underline {
+  text-decoration: none;
+}
+
+.github-link .emoji {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.github-link:hover .emoji {
+  transform: rotate(-15deg) scale(1.2);
+}

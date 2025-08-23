@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>{% block title %}EcoTrack Local{% endblock %}</title>
+
+  <!-- ✅ SEO Meta Tags -->
+  <meta name="description" content="EcoTrack Local empowers communities to track, celebrate, and amplify local eco-actions. Join the movement for sustainability.">
+  <meta name="keywords" content="EcoTrack, sustainability, local action, environment, green living, community impact">
+  <meta name="author" content="Frank Olum">
+
+  <!-- ✅ Mobile & PWA Friendly -->
+  <meta name="theme-color" content="#28a745">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- ✅ Social Sharing (Open Graph) -->
+  <meta property="og:title" content="EcoTrack Local">
+  <meta property="og:description" content="Track and celebrate local eco-actions. Make sustainability visible and fun.">
+  <meta property="og:image" content="{% static 'images/og-preview.png' %}">
+  <meta property="og:url" content="https://ecotrack.local">
+  <meta property="og:type" content="website">
+
+  <!-- ✅ Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="EcoTrack Local">
+  <meta name="twitter:description" content="Join EcoTrack Local and make your eco-impact visible.">
+  <meta name="twitter:image" content="{% static 'images/og-preview.png' %}">
+
+  <!-- ✅ Favicon Fallback for legacy support -->
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+  <!-- ✅ Modern Favicon and PWA Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon-180x180.png' %}">
+  <link rel="manifest" href="{% static 'site.webmanifest' %}">
+
+  <!-- ✅ Stylesheets -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+  {% block head %}{% endblock %}
+
+  <!-- ✅ Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <h1 class="mb-4 text-success">🌿 EcoTrack Local</h1>
+    {% if user.is_authenticated %}
+    <div class="d-flex justify-content-end mb-3 align-items-center">
+      <!-- 🖼️ Avatar Display -->
+      {% if user.profile.avatar %}
+        <a href="{% url 'profile' %}" class="me-2">
+          <img src="{{ user.profile.avatar.url }}" alt="Avatar" 
+            class="rounded-circle border" width="40" height="40">
+        </a>
+      {% else %}
+        <a href="{% url 'profile' %}" class="me-2">
+          <img src="{% static 'images/default-avatar.png' %}" 
+            alt="Default Avatar" class="rounded-circle border" 
+            width="40" height="40">
+        </a>
+      {% endif %}
+      <!-- 🌟 Total Points Display -->
+      <span class="me-3 text-primary fw-bold">
+        🌱 Points: {{ user.profile.total_points }}
+      </span>
+      <!-- Profile, Edit, and Logout Buttons -->
+      <a href="{% url 'profile' %}" class="btn btn-outline-secondary me-2">
+        👤 Profile
+      </a>
+      <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary me-2">
+        ✏️ Edit Profile
+      </a>
+      <form method="post" action="{% url 'logout' %}" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger">
+        🚪 Log Out</button>
+      </form>
+    </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </div>
+  <!-- Divider -->
+  <div class="divider text-center text-muted">
+    <span>🌿 Empowering Change</span>
+  </div>
+  <!-- Footer -->
+  <footer id="page-footer" class="footer mt-4 text-center text-muted">
+    <div class="footer-content">
+      Empowering local action with 💚 · <strong>FrankTheCodeBoy</strong> · © 2025<br>
+      <a href="https://github.com/frankTheCodeBoy" target="_blank" rel="noopener noreferrer">
+        GitHub Repo
+      </a>
+    </div>
+  </footer>
+  {% block extra_scripts %}{% endblock %}
+  <script src="{% static 'js/scroll-footer.js' %}"></script>
+</body>
+</html>

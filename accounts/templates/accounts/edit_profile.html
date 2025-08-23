@@ -1,0 +1,101 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+  <h2 class="mb-4">✏️ Edit Your Profile</h2>
+
+  <!-- Avatar Preview -->
+  <div class="text-center mb-4">
+    {% if user.profile.avatar %}
+      <img src="{{ user.profile.avatar.url }}" alt="Current Avatar" 
+           class="rounded-circle border shadow" width="120" height="120">
+    {% else %}
+      <img src="{% static 'images/default-avatar.png' %}" alt="Default Avatar" 
+           class="rounded-circle border shadow" width="120" height="120">
+    {% endif %}
+    <p class="mt-2 text-muted">Upload a new avatar below</p>
+  </div>
+
+  <!-- Edit Form -->
+  <form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="id_username" class="form-label">Username</label>
+      {{ form.username }}
+    </div>
+    <div class="mb-3">
+      <label for="id_email" class="form-label">Email</label>
+      {{ form.email }}
+    </div>
+    <div class="mb-3">
+      <label for="id_avatar" class="form-label">Avatar</label>
+      {{ form.avatar }}
+    </div>
+
+    <!-- Bio with Quote Suggestion -->
+    <div class="mb-3">
+      <label for="id_bio" class="form-label">Status / Bio</label>
+      {{ form.bio }}
+      <small class="text-muted d-block">
+        Share a short quote, status, or personal message (max 500 characters). Emojis welcome! 🌟
+      </small>
+      <small class="text-muted d-block">
+        💡 Tip: Click the button below a few times to explore different quotes. Pick one that feels right!
+      </small>
+      <button type="button" id="suggestBtn" class="btn btn-sm btn-outline-secondary mt-2" onclick="suggestQuote()">💡 Suggest a Quote</button>
+    </div>
+
+    <button type="submit" class="btn btn-success">💾 Save Changes</button>
+  </form>
+
+  <!-- Navigation -->
+  <div class="mt-4">
+    <a href="{% url 'profile' %}" class="btn btn-outline-primary">← Back to Profile</a>
+  </div>
+
+  <!-- Quote Suggestion Script -->
+  <script>
+    function suggestQuote() {
+      const quotes = [
+        "🌱 Small actions lead to big change.",
+        "💬 Be the change you wish to see.",
+        "🌍 Every step counts toward a better planet.",
+        "✨ Progress, not perfection.",
+        "🔥 Passion fuels impact.",
+        "🛠️ Build with purpose, share with pride.",
+        "🌟 Let your actions speak louder than words.",
+        "📣 Inspire others by being yourself.",
+        "💡 Creativity is contagious — pass it on.",
+        "🚀 Dream big, act local."
+      ];
+
+      const bioField = document.getElementById("id_bio");
+      let newQuote = quotes[Math.floor(Math.random() * quotes.length)];
+
+      // Avoid repeating the same quote consecutively
+      if (bioField.value === newQuote) {
+        const filtered = quotes.filter(q => q !== bioField.value);
+        newQuote = filtered[Math.floor(Math.random() * filtered.length)];
+      }
+
+      bioField.value = newQuote;
+
+      // Add flash effect for visual feedback
+      bioField.classList.add("flash");
+      setTimeout(() => bioField.classList.remove("flash"), 300);
+    }
+  </script>
+
+  <!-- Flash Animation Style -->
+  <style>
+    #id_bio.flash {
+      animation: flashQuote 0.3s ease;
+    }
+
+    @keyframes flashQuote {
+      0% { background-color: #e0ffe0; }
+      100% { background-color: white; }
+    }
+  </style>
+{% endblock %}

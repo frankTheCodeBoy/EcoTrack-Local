@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Server Error – EcoTrack Local</title>
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+<<<<<<< HEAD
+=======
+  <!---<link rel="stylesheet" href="{% static 'css/error.css' %}">--->
+>>>>>>> origin/main
+</head>
+<body class="error-page">
+  <div class="container">
+    <h1>⚠️ Something Went Wrong (500)</h1>
+    <p>Our servers hit a snag while processing your request.</p>
+    <p>We’re working to fix it. Please try again later.</p>
+    <a href="{% url 'log_action' %}" class="btn">Return to Dashboard</a>
+  </div>
+  <style>
+<<<<<<< HEAD
+  body.error-page {
+=======
+    body.error-page {
+>>>>>>> origin/main
+    font-family: 'Segoe UI', sans-serif;
+    background: #f0fdf4;
+    color: #333;
+    text-align: center;
+    padding: 5rem;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: auto;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    margin: 0.5rem 0;
+  }
+
+  .btn {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background: #2e7d32;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  </style>
+</body>
+</html>

@@ -1,0 +1,113 @@
+{% extends 'tracker/base.html' %}
+{% load static %}
+{% load custom_tags %}
+{% block title %}Regional Summary{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/region_summary_animations.css' %}">
+{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">📍 Regional Eco-Actions Summary</h2>
+<p class="text-muted">Explore how different regions are contributing to eco-action.</p>
+
+{% if user.is_staff and unspecified_summary.total_actions > 0 %}
+  <div class="card border-warning mb-4 p-3" id="unspecified-summary">
+    <h5 class="text-warning">⚠️ Unspecified Region Summary</h5>
+    <p class="mb-1">Total Actions: <strong>{{ unspecified_summary.total_actions }}</strong></p>
+    <p class="mb-0">Unique Contributors: <strong>{{ unspecified_summary.unique_users }}</strong></p>
+    <small class="text-muted">
+      These actions were submitted without a valid region and are excluded from the chart and table below.
+    </small>
+  </div>
+{% endif %}
+
+{% if not user.is_staff %}
+  <small class="text-muted d-block mb-2">
+    Showing top {{ max_regions }} regions by total actions.
+  </small>
+{% endif %}
+
+<!-- Chart Canvas -->
+<canvas id="regionChart" width="600" height="300" class="mb-4" aria-label="Regional Action Chart"></canvas>
+
+<!-- Region Table -->
+<table class="table table-bordered table-striped align-middle" id="region-table">
+  <thead class="table-success">
+    <tr>
+      <th scope="col">Region</th>
+      <th scope="col">Total Actions</th>
+      <th scope="col">Unique Contributors</th>
+      <th scope="col">Top Contributor</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for region in region_data %}
+  <tr data-region="{{ region.cleaned_location|default:'Unknown' }}"
+      title="{{ region.emoji|default:'❓' }} {{ region.cleaned_location|default:'Unknown' }} 🌐
+Latitude: {{ region.latitude|default:'N/A' }} | Longitude: {{ region.longitude|default:'N/A' }}"
+      style="--i:{{ forloop.counter0 }}">
+    <td>{{ region.emoji|default:'❓' }} {{ region.cleaned_location|default:'Unknown' }}</td>
+    <td>{{ region.total_actions }}</td>
+    <td>{{ region.unique_users }}</td>
+    <td>
+      {% with data=top_contributors|get_item:region.cleaned_location %}
+        {% if data %}
+          <div class="d-flex align-items-center">
+            <img src="{% if data.profile.avatar %}{{ data.profile.avatar.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
+                 alt="Avatar of {{ data.user.username }}"
+                 class="rounded-circle me-2 avatar-img"
+                 width="40" height="40"
+                 loading="lazy">
+            <a href="{% url 'profile' %}?user={{ data.user.username }}">
+              {{ data.user.username }}
+            </a>
+            <span class="ms-2 text-muted">({{ data.action_count }})</span>
+          </div>
+        {% else %}
+          <span class="text-muted">No contributors yet</span>
+        {% endif %}
+      {% endwith %}
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<div class="mt-4">
+  <a href="{% url 'dashboard' %}" class="btn btn-outline-primary">⬅️ Back to Dashboard</a>
+  <a href="{% url 'leaderboard' %}" class="btn btn-outline-info">🏆 View Leaderboard</a>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const regionLabels = [{% for region in region_data %}"{{ region.cleaned_location|default:'Unknown' }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+  const regionActions = [{% for region in region_data %}{{ region.total_actions }}{% if not forloop.last %},{% endif %}{% endfor %}];
+
+  const ctx = document.getElementById('regionChart').getContext('2d');
+  const regionChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: regionLabels,
+      datasets: [{
+        label: 'Total Actions by Region',
+        data: regionActions,
+        backgroundColor: 'rgba(0, 175, 84, 0.6)',
+        borderColor: 'rgba(0, 175, 84, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { stepSize: 1 }
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}

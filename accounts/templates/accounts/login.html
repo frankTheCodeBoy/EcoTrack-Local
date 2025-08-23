@@ -1,0 +1,41 @@
+{% extends 'accounts/base.html' %}
+{% load formtags %}
+{% block title %}Log In · EcoTrack Local{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm p-4 animate__animated animate__fadeIn">
+  <h2 class="mb-4 text-center text-success">🔐 Log In to EcoTrack Local</h2>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">{{ form.non_field_errors.0 }}</div>
+    {% endif %}
+
+    <div class="mb-3">
+      <label for="id_username" class="form-label">👤 Username</label>
+      {{ form.username|add_class:"form-control" }}
+      {% if form.username.errors %}
+        <div class="text-danger small">{{ form.username.errors.0 }}</div>
+      {% endif %}
+    </div>
+
+    <div class="mb-3">
+      <label for="id_password" class="form-label">🔑 Password</label>
+      {{ form.password|add_class:"form-control" }}
+      {% if form.password.errors %}
+        <div class="text-danger small">{{ form.password.errors.0 }}</div>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-success w-100">🚀 Log In</button>
+  </form>
+
+  <hr class="my-4">
+  <p class="text-center">
+    Don't have an account?
+    <a href="{% url 'signup' %}" class="text-decoration-none">🌱 Sign up here</a><br>
+    <a href="{% url 'password_reset' %}" class="text-decoration-none">Forgot password?</a>
+  </p>
+</div>
+{% endblock %}

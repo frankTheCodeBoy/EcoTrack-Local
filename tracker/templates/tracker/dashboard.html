@@ -1,0 +1,133 @@
+{% extends 'tracker/base.html' %}
+{% load static %}
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+  <h2 class="mb-4">🌍 Weekly Impact Dashboard</h2>
+  <!-- Welcome Message -->
+  <div class="mb-3">
+    <h5>Hello, <strong>{{ user.username }}</strong> 👋</h5>
+    <p class="text-muted">Here’s your personalized eco summary for the week.
+    </p>
+  </div>  
+  {% if badge %}
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+      <span class="me-2 fs-4">{{ badge|safe }}</span>
+      <span>You’ve earned this badge based on your eco actions!</span>
+    </div>
+  {% endif %}
+  <!-- Total Points Card -->
+  <div class="card p-3 shadow-sm mb-4 border-primary">
+    <h5 class="mb-2">🌟 Total Eco Points</h5>
+    <p class="fs-4 text-primary">
+      <strong>{{ total_points }}</strong> points earned so far!
+    </p>
+    <small class="text-muted">
+    Keep logging actions to level up your badge.</small>
+  </div>
+  <!-- 🚀 Progress Toward Next Badge -->
+  <div class="card p-3 shadow-sm mb-4 border-info">
+    <h5 class="mb-2">🚀 Progress to Next Badge</h5>
+    <p class="mb-2">
+      Next badge: <strong>{{ next_badge }}</strong>
+      {% if points_needed > 0 %}
+        ({{ points_needed }} points to go)
+      {% else %}
+        🎉 You've reached the highest badge!
+      {% endif %}
+    </p>
+    <div class="progress" style="height: 20px;">
+      <div class="progress-bar bg-info" role="progressbar"
+           style="width: {{ progress_percent }}%;"
+           aria-valuenow="{{ progress_percent }}" 
+           aria-valuemin="0" aria-valuemax="100">
+        {{ progress_percent }}%
+      </div>
+    </div>
+  </div>
+
+  {% if streak_count and streak_count > 1 %}
+    <div class="card p-3 shadow-sm mb-4 border-success">
+      <h5 class="mb-2">🔥 Eco Streak</h5>
+      <p class="fs-5">
+      You've logged actions for <strong>{{ streak_count }}</strong> 
+      consecutive weeks!</p>
+    </div>
+  {% endif %}
+  {% if summary %}
+    <!-- Export Button -->
+    <div class="d-flex justify-content-end mb-3">
+      <button class="export-btn btn btn-outline-primary" 
+        title="Save chart as PNG">
+        📤 Download Chart
+      </button>
+    </div>
+    <!-- Chart Type Selector -->
+    <div class="mb-3" style="max-width: 200px;">
+      <label for="chartTypeSelector" class="form-label">Chart Type:</label>
+      <select id="chartTypeSelector" class="form-select">
+        <option value="bar">Bar Chart</option>
+        <option value="line">Line Chart</option>
+      </select>
+    </div>
+    <!-- Chart Canvas -->
+    <canvas id="ecoChart" width="400" height="200" class="mb-4"></canvas>
+    <!-- Action Summary List -->
+    <ul class="list-group mb-4">
+      {% for action, count in summary.items %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ action|title }}
+          <span class="badge bg-success rounded-pill">{{ count }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+    <!-- Total Actions Card -->
+    <div class="card p-3 shadow-sm mb-4">
+      <h5 class="mb-2">Total Actions Logged:</h5>
+      <p class="fs-4 text-success">{{ total_actions }}</p>
+    </div>
+  {% else %}
+    <div class="alert alert-warning">
+      No actions logged this week. Start tracking to earn badges!
+    </div>
+  {% endif %}
+
+  <!-- Navigation Buttons -->
+  <div class="d-flex justify-content-between mb-5">
+    <a href="/" class="btn btn-outline-success">➕ Log Another Action</a>
+    &nbsp;
+    <div>
+      <a href="{% url 'profile' %}" 
+         class="btn btn-outline-secondary me-2">👤 View Profile</a>
+      <a href="{% url 'edit_profile' %}" 
+         class="btn btn-outline-warning me-2">✏️ Edit Profile</a>
+      <a href="{% url 'password_reset' %}" 
+         class="btn btn-outline-danger">🔐 Reset Pass</a>
+      <a href="{% url 'leaderboard' %}" 
+         class="btn btn-outline-info me-2">🏆 Leaderboard</a>
+      <a href="{% url 'region_summary' %}" 
+          class="btn btn-outline-dark me-2">📍Regional Summary</a>
+      <a href="https://github.com/frankTheCodeBoy/EcoTrack-Local" 
+        class="btn btn-link no-underline github-link" 
+        target="_blank" rel="noopener noreferrer">
+        <span class="emoji">🛠️</span> View Project on GitHub
+      </a>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_scripts %}
+  {% if summary %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      window.username = "{{ user.username }}";
+      const chartLabels = [{% for action in summary.keys %}"{{ action|title }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+      const chartData = [{% for count in summary.values %}{{ count }}{% if not forloop.last %},{% endif %}{% endfor %}];
+    </script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/export.js' %}"></script>
+    <script src="{% static 'js/badge.js' %}"></script>
+  {% endif %}
+{% endblock %}

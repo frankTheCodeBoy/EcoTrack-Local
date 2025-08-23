@@ -1,0 +1,138 @@
+/* === Layout === */
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+/* === Chart Card === */
+.card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  border: none;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+/* === Canvas Styling === */
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* === Badge Logic (Placeholder) === */
+.badge {
+  font-size: 0.9rem;
+  padding: 0.4em 0.6em;
+  border-radius: 0.5rem;
+  font-weight: 500;
+}
+
+.badge-success {
+  background-color: #198754;
+  color: #fff;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+/* === Export Button === */
+.export-btn {
+  margin-top: 20px;
+  padding: 10px 16px;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.export-btn:hover {
+  background-color: #0b5ed7;
+}
+
+.no-underline {
+  text-decoration: none;
+}
+
+/* === Animated Divider === */
+.divider {
+  text-align: center;
+  margin: 2rem 0;
+  color: #6c757d;
+  font-size: 1rem;
+  font-weight: 500;
+  opacity: 0;
+  animation: fadeIn 1s ease-in forwards;
+  animation-delay: 0.3s;
+}
+
+/* Centered span with decorative lines */
+.divider span {
+  position: relative;
+  display: inline-block;
+  padding: 0 1rem;
+  background-color: #f8f9fa;
+}
+
+/* Horizontal lines on either side */
+.divider span::before,
+.divider span::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40px;
+  height: 1px;
+  background-color: #ced4da;
+}
+
+.divider span::before {
+  left: -50px;
+}
+
+.divider span::after {
+  right: -50px;
+}
+
+/* === Fade-in Animation === */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Footer scroll-trigger animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer-animate {
+  animation: fadeInUp 1s ease-out forwards;
+}

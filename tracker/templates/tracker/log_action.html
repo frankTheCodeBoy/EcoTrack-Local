@@ -1,0 +1,10 @@
+{% extends 'tracker/base.html' %}
+{% block content %}
+  <h2>Log Your Eco Action 🌿</h2>
+  <form method="post" class="card p-3 shadow-sm">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success mt-2">Submit</button>
+  </form>
+  <a href="/dashboard/" class="btn btn-link mt-3">View Dashboard</a>
+{% endblock %}

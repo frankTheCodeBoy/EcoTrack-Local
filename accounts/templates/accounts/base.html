@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="{{ lang|default:'en' }}">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>{% block title %}EcoTrack Accounts{% endblock %}</title>
+
+  <!-- ✅ SEO Meta Tags -->
+  <meta name="description" content="Access your EcoTrack account, manage your profile, and join the movement for sustainability.">
+  <meta name="keywords" content="EcoTrack, login, signup, account, sustainability, community">
+  <meta name="author" content="Frank Olum">
+
+  <!-- ✅ Mobile & PWA Friendly -->
+  <meta name="theme-color" content="#28a745">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- ✅ Social Sharing (Open Graph) -->
+  <meta property="og:title" content="EcoTrack Accounts">
+  <meta property="og:description" content="Log in or sign up to track your eco-impact and join a community of changemakers.">
+  <meta property="og:image" content="{% static 'images/og-preview.png' %}">
+  <meta property="og:url" content="https://ecotrack.local/accounts">
+  <meta property="og:type" content="website">
+
+  <!-- ✅ Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="EcoTrack Accounts">
+  <meta name="twitter:description" content="Join EcoTrack and make your eco-impact visible.">
+  <meta name="twitter:image" content="{% static 'images/og-preview.png' %}">
+
+  <!-- ✅ Favicon & Manifest -->
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon-180x180.png' %}">
+  <link rel="manifest" href="{% static 'site.webmanifest' %}">
+
+  <!-- ✅ Stylesheets -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="container py-5 bg-light">
+  {% block content %}{% endblock %}
+  
+  <!-- Footer -->
+  <footer id="page-footer" class="footer mt-4 text-center text-muted">
+    <div class="footer-content">
+      Empowering local action with 💚 · <strong>FrankTheCodeBoy</strong> · © 2025<br>
+      <a href="https://github.com/frankTheCodeBoy" target="_blank" rel="noopener noreferrer">
+        GitHub Repo
+      </a>
+    </div>
+  </footer>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>
