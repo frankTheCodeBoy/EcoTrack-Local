@@ -142,6 +142,9 @@ LOGOUT_REDIRECT_URL = 'login'  # After logout
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 STATIC_URL = 'static/'
+# During development, you might want to use this:
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# Production settings
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Media files (User-uploaded content)
